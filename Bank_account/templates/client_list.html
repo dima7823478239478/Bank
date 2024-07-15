@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Клиенты</title>
+</head>
+<body>
+    <h1>Список клиентов</h1>
+    <ul>
+        {% for client in clients %}
+            <li><a href="{% url 'client_detail' client.card_number %}">{{ client.full_name }}</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'create_client' %}"><button>Добавить нового клиента</button></a>
+    <a href="/"><button>Главная</button></a>
+</body>
+</html>

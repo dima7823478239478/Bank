@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Банки</title>
+</head>
+<body>
+    <h1>Список банков</h1>
+    <ul>
+    {% for bank in banks %}
+    <li>
+        {% if bank.bank_code %}
+            <a href="{% url 'bank_detail' bank.bank_code %}">{{ bank.bank_name }}</a>
+        {% else %}
+            {{ bank.bank_name }}
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+
+    <a href="{% url 'create_bank' %}">Добавить новый банк</a>
+    <a href="/"><button>Главная</button></a>
+</body>
+</html>

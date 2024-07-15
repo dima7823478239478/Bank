@@ -1,0 +1,18 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Банк(детально)</title>
+</head>
+<body>
+    <h1>{{ bank.name }}</h1>
+    <p>Код банка: {{ bank.bank_code }}</p>
+    <p>Название банка: {{ bank.bank_name }}</p>
+    <p>Адрес банка: {{ bank.legal_address }}</p>
+    <!-- Другие детали банка -->
+    <a href="{% url 'edit_bank' bank.bank_code %}">Редактировать</a>
+    <a href="{% url 'delete_bank' bank.bank_code  %}">Удалить</a>
+
+    <a href="/"><button>Главная</button></a>
+</body>
+</html>

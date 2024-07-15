@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Банковская система</title>
+</head>
+<body>
+    <h1>Добро пожаловать в банковскую систему!</h1>
+    <div>
+        <a href="{% url 'bank_list' %}"><button>Банки</button></a>
+        <a href="{% url 'atm_list' %}"><button>Банкоматы</button></a>
+        <a href="{% url 'client_list' %}"><button>Клиенты</button></a>
+        <a href="{% url 'operation_list' %}"><button>Операции</button></a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Детали операций</title>
+</head>
+<body>
+    <h1>Детали операций</h1>
+    <p>Сумма: {{ operation.amount }}</p>
+    <p>Имя клиента: {{ client.full_name }}</p> <!-- Используем имя клиента из контекста -->
+    <p>Дата: {{ operation.date }}</p>
+    <!-- Add more details as needed -->
+    <a href="{% url 'edit_operation' operation.id %}">Редактировать</a>
+    <a href="{% url 'delete_operation' operation.id %}">Удалить</a>
+    <!-- Add more details as needed -->
+<a href="/"><button>Главная</button></a>
+</body>
+</html>

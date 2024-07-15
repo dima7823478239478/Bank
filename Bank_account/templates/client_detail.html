@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Client Detail</title>
+</head>
+<body>
+    <h1>Client Detail</h1>
+    <p>Имя: {{ client.full_name }}</p>
+    <p>Номер карточки: {{ client.card_number }}</p>
+    <!-- Add more details as needed -->
+    <a href="{% url 'edit_client' client.card_number %}">Редактировать</a>
+    <a href="{% url 'delete_client' client.card_number %}">Удалить</a>
+<a href="/"><button>Главная</button></a>
+</body>
+</html>

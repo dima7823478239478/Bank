@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Банкомат(детально)</title>
+</head>
+<body>
+    <h1>Банкоматы(детально)</h1>
+    <p>Номер: {{ atm.atm_number }}</p>
+    <p>Банк: {{ atm.bank }}</p>
+    <p>Адрес: {{ atm.address }}</p>
+    <!-- Add more details as needed -->
+    <a href="{% url 'edit_atm' atm.atm_number %}">Редактировать</a>
+    <a href="{% url 'delete_atm' atm.atm_number  %}">Удалить</a>
+<a href="/"><button>Главная</button></a>
+</body>
+</html>
