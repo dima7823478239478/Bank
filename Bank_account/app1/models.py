@@ -21,6 +21,7 @@ class Clients(models.Model):
     full_name = models.CharField(max_length=255, default='')
     address = models.CharField(max_length=255, default='')
     bank = models.ForeignKey(Bank, on_delete=models.CASCADE, null=True)
+    account = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
         return self.full_name
@@ -35,3 +36,4 @@ class Operations(models.Model):
 
     def __str__(self):
         return self.amount
+
