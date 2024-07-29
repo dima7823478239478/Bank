@@ -32,7 +32,8 @@ class ClientsForm(forms.ModelForm):
             'card_number': 'Номер карты',
             'full_name': 'ФИО',
             'address': 'Адрес проживания',
-            'bank':'Номер банка'
+            'bank':'Номер банка',
+            'account':'Счет'
 
             # Для каждого поля укажите соответствующую метку на русском
         }
