@@ -10,7 +10,7 @@ class BankForm(forms.ModelForm):
             'bank_name': 'Название банка',
             'legal_address': 'Адрес банка'
 
-            # Для каждого поля укажите соответствующую метку на русском
+
         }
 class ATMForm(forms.ModelForm):
     class Meta:
@@ -21,7 +21,7 @@ class ATMForm(forms.ModelForm):
             'address': 'Адрес банкомата',
             'bank': 'Номер банка'
 
-            # Для каждого поля укажите соответствующую метку на русском
+
         }
 
 class ClientsForm(forms.ModelForm):
@@ -35,7 +35,7 @@ class ClientsForm(forms.ModelForm):
             'bank':'Номер банка',
             'account':'Счет'
 
-            # Для каждого поля укажите соответствующую метку на русском
+
         }
 
 class OperationsForm(forms.ModelForm):
@@ -49,7 +49,8 @@ class OperationsForm(forms.ModelForm):
             'date': 'Дата (Формата: Год-Месяц-Число)',
             'time': 'Время (Формата: Часы-Минуты-Секунды)',
             'comission': 'Комиссия',
-            'amount':'Сумма'
+            'amount':'Сумма',
+            'add_take':'Снять деньги',
 
-            # Для каждого поля укажите соответствующую метку на русском
+
         }

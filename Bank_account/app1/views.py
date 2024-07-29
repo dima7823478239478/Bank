@@ -1,5 +1,6 @@
 from django.views.generic import ListView, DetailView
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from .forms import BankForm, ATMForm, ClientsForm, OperationsForm
 from .models import Bank, ATM, Clients, Operations
 from decimal import Decimal
@@ -158,44 +159,121 @@ def create_operation(request):
         form = OperationsForm(request.POST)
         if form.is_valid():
             operation = form.save(commit=False)
+            client = operation.card_number
+            commission_amount = Decimal('0')
 
             if operation.card_number.bank != operation.atm_number.bank:
-                # Рассчитываем комиссию и обновляем сумму
-                operation.comission = operation.amount * Decimal('0.012')
-                operation.amount += operation.comission
+                # Рассчитываем комиссию
+                commission_amount = operation.amount * Decimal('0.012')
+                # Проверка, достаточно ли средств на счете для снятия денег, включая комиссию
+                if operation.add_take and client.account < (operation.amount + commission_amount):
+                    messages.error(request, 'Недостаточно средств на счете для снятия денег с учетом комиссии.')
+                    return render(request, 'operation_form.html', {'form': form})
+                elif operation.add_take == False:
+                    client.account += operation.amount
+                else:
+                    client.account -= operation.amount # Уменьшаем счет клиента на сумму комиссии
 
-            operation.save()
+
+            else:
+                # Обновляем счет клиента в зависимости от add_take
+                if operation.add_take:
+                    client.account -= operation.amount
+                else:
+                    client.account += operation.amount
+
+
+
+            client.save()  # Сохраняем изменения в клиенте
+
+            if commission_amount > 0:
+                operation.comission = commission_amount
+                bank = operation.atm_number.bank
+                bank.save()
+
+            operation.save()  # Сохраняем операцию
             return redirect('operation_list')
     else:
         form = OperationsForm()
     return render(request, 'operation_form.html', {'form': form})
-
 
 def edit_operation(request, operation_id):
     operation = Operations.objects.get(id=operation_id)
 
     if request.method == 'POST':
         form = OperationsForm(request.POST, instance=operation)
-
         if form.is_valid():
-            # Получаем обновленные данные из формы, но еще не сохраняем их в базу данных
+            old_operation = Operations.objects.get(id=operation_id)
+            client = old_operation.card_number
+            old_bank = old_operation.atm_number.bank
+
+            # Восстанавливаем старое значение на счете клиента
+            if old_operation.add_take:
+                client.account += old_operation.amount
+                if old_operation.comission > 0:
+                    client.account += old_operation.comission
+                    old_bank.account -= old_operation.comission
+                    old_bank.save()
+            else:
+                client.account -= old_operation.amount
+                if old_operation.comission > 0:
+                    client.account += old_operation.comission
+                    old_bank.account -= old_operation.comission
+                    old_bank.save()
+
             operation = form.save(commit=False)
+            commission_amount = Decimal('0')
 
             if operation.card_number.bank != operation.atm_number.bank:
-                # Рассчитываем комиссию и обновляем сумму
-                operation.comission = operation.amount * Decimal('0.012')
-                operation.amount += operation.comission
+                # Рассчитываем комиссию
+                commission_amount = operation.amount * Decimal('0.012')
 
-            # Сохраняем изменения в базу данных
-            operation.save()
+            # Проверка, достаточно ли средств на счете для снятия денег, включая комиссию
+            if operation.add_take and client.account < (operation.amount + commission_amount):
+                messages.error(request, 'Недостаточно средств на счете для снятия денег с учетом комиссии.')
+                return render(request, 'operation_form.html', {'form': form})
+
+            # Обновляем счет клиента в зависимости от add_take
+            if operation.add_take:
+                client.account -= (operation.amount + commission_amount)
+            else:
+                client.account += operation.amount
+                client.account -= commission_amount  # Уменьшаем счет клиента на сумму комиссии
+
+            client.save()  # Сохраняем изменения в клиенте
+
+            if commission_amount > 0:
+                operation.comission = commission_amount
+                bank = operation.atm_number.bank
+                bank.account += commission_amount  # Добавляем комиссию к счету банка
+                bank.save()
+
+            operation.save()  # Сохраняем операцию
             return redirect('operation_list')
     else:
         form = OperationsForm(instance=operation)
 
     return render(request, 'operation_form.html', {'form': form})
 
-
 def delete_operation(request, operation_id):
     operation = Operations.objects.get(id=operation_id)
-    operation.delete()
+    client = operation.card_number
+    bank = operation.atm_number.bank
+
+    # Восстанавливаем значение на счете клиента перед удалением операции
+    if operation.add_take:
+        client.account += operation.amount
+        if operation.comission > 0:
+            client.account += operation.comission
+            bank.account -= operation.comission
+            bank.save()
+    else:
+        client.account -= operation.amount
+        if operation.comission > 0:
+            client.account += operation.comission
+            bank.account -= operation.comission
+            bank.save()
+
+    client.save()  # Сохраняем изменения в клиенте
+    operation.delete()  # Удаляем операцию
     return redirect('operation_list')
