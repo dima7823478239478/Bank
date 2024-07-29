@@ -277,3 +277,4 @@ def delete_operation(request, operation_id):
     client.save()  # Сохраняем изменения в клиенте
     operation.delete()  # Удаляем операцию
     return redirect('operation_list')
+#
