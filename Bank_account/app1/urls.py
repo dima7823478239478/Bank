@@ -28,10 +28,10 @@ urlpatterns = [
     path('clients/<str:card_number>/edit/', views.edit_client, name='edit_client'),
     path('clients/<str:card_number>/delete/', views.delete_client, name='delete_client'),
 
-    # Пути для операций
+# Пути для операций
     path('operations/', views.OperationListView.as_view(), name='operation_list'),
     path('operations/create/', views.create_operation, name='create_operation'),
-    path('operations/<operation_id:amount>/', views.OperationDetailView.as_view(), name='operation_detail'),
+    path('operations/<int:operation_id>/', views.OperationDetailView.as_view(), name='operation_detail'),
     path('operations/<int:operation_id>/edit/', views.edit_operation, name='edit_operation'),
     path('operations/<int:operation_id>/delete/', views.delete_operation, name='delete_operation'),
 ]

@@ -8,7 +8,8 @@ class BankForm(forms.ModelForm):
         labels = {
             'bank_code': 'Код банка',
             'bank_name': 'Название банка',
-            'legal_address': 'Адрес банка'
+            'legal_address': 'Адрес банка',
+            'profit': 'Прибыль банка'
 
 
         }
@@ -54,4 +55,6 @@ class OperationsForm(forms.ModelForm):
 
 
         }
+    
+
         #
