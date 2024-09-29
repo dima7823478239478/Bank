@@ -9,7 +9,15 @@
     <h1>Список операций</h1>
     <ul>
         {% for operation in operations %}
-            <li><a href="{% url 'operation_detail' operation.amount %}">{{ operation.amount }}</a></li>
+            <li>
+                <a href="{% url 'operation_detail' operation.id %}">
+                    {% if operation.card_number.bank != operation.atm_number.bank %}
+                        {{ operation.amount|add:operation.comission|floatformat:2 }}
+                    {% else %}
+                        {{ operation.amount|floatformat:2 }}
+                    {% endif %}
+                </a>
+            </li>
         {% endfor %}
     </ul>
     <a href="{% url 'create_operation' %}"><button>Добавить новую операцию</button></a>
